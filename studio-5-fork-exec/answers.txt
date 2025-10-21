@@ -1,0 +1,73 @@
+1. 
+Process PID: 34492
+Process PID: 34497
+Process PID: 34498
+
+2. 
+Now when I run the program the system creates a near-identical replica of the calling process and ouputs 2. 
+Process PID: 34551
+Process PID: 34552
+
+3.
+In the parent process, fork() returns the PID of the child.
+In the child process, fork() returns 0.
+On error, it returns -1.
+
+4. 
+Parent process: PID = 34768, Child PID = 34769
+Child process: PID = 34769
+
+5. 
+I observed that the system prints the parent immediately and the child prints a couple seconds later
+No, it does not behave the way I would expect, one thing that I was surpised about was that the child process printed in my command line after.
+
+Output: 
+Parent process: PID = 34890
+Child process: PID = 34891
+
+
+6. 
+It is different because the parent waits 3 seconds for the child to finish before printing, so the child node is printed before the parent node now.
+Output:
+Child process: PID = 34952
+Parent process: PID = 34951
+
+7.
+kiaramathews@Kiaras-MacBook-Pro studio-5-fork-exec % ls -l
+total 104
+-rw-r--r--@ 1 kiaramathews  staff   1478 Oct 20 21:08 answers.txt
+-rwxr-xr-x  1 kiaramathews  staff  33608 Oct 20 21:05 fork
+-rw-r--r--@ 1 kiaramathews  staff    420 Oct 20 21:05 fork.c
+-rw-r--r--  1 kiaramathews  staff   5946 Oct 19 20:31 README.md
+
+8.
+kiaramathews@Kiaras-MacBook-Pro studio-5-fork-exec % ./fork            
+total 104
+-rw-r--r--@ 1 kiaramathews  staff   1796 Oct 20 21:09 answers.txt
+-rwxr-xr-x  1 kiaramathews  staff  33736 Oct 20 21:10 fork
+-rw-r--r--@ 1 kiaramathews  staff    514 Oct 20 21:10 fork.c
+-rw-r--r--  1 kiaramathews  staff   5946 Oct 19 20:31 README.md
+Parent process: PID = 35038
+
+### Optional Enrichment Exercises
+
+1.  Rearrange your call to the `execvp()` function so that you can call
+    a different program with different arguments.
+
+Output: 
+kiaramathews@Kiaras-MacBook-Pro studio-5-fork-exec % ps -l
+  UID   PID  PPID        F CPU PRI NI       SZ    RSS WCHAN     S             ADDR TTY           TIME CMD
+  501 34855 34852     4006   0  31  0 410790096   3424 -      S                   0 ttys000    0:00.07 -zsh
+
+
+
+2.  Rearrange your `execvp()` call so that you can execute an arbitrary
+    program, for example as a result of user input. This is a vital part
+    of Lab 2, and we will explore it further in a future studio.
+
+Output:
+kiaramathews@Kiaras-MacBook-Pro studio-5-fork-exec % ./fork            
+Enter a command to run (e.g., ls, date, whoami): whoami
+kiaramathews
+Parent process: PID = 35171
+
