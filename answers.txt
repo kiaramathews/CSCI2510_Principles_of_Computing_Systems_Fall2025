@@ -1,0 +1,57 @@
+1. 
+Enter command: ls -l
+Input received:
+ls -l
+
+2.  What difference is there between the initial call to
+    `strtok()` and subsequent calls that parse the same string?
+The difference is that the intial call returns the first word while the sebsequent calls return 
+the remaining words. 
+
+3. Use a space (" ") for the delimiter for regular text Input
+
+4. 
+output:
+Enter command: ls -l
+First token:
+ls
+
+5.
+Ouput:
+Enter command: My name is Kiara
+Token: My
+Token: name
+Token: is
+Token: Kiara
+
+6. 
+int max_args = 20;
+int max_argv_size = max_args + 2; //one for argv[0], one for null terminator
+char* cmd;
+char* my_argv[max_argv_size];
+
+8. cmd = strtok(input_string, " ");
+
+9.
+my_argv[0] = cmd;
+        
+        char *res;
+        int i = 1; 
+        
+        while ((res = strtok(NULL, " ")) != NULL && i < max_argv_size - 1) {
+            my_argv[i] = res;
+            i++;
+        }
+        
+        my_argv[i] = NULL;
+
+10.
+output:
+kiaramathews@Kiaras-MacBook-Pro studio6 % ./studio6               
+Enter command: ls -l
+total 104
+-rw-r--r--@ 1 kiaramathews  staff    883 Oct 28 01:54 answers.txt
+-rw-r--r--@ 1 kiaramathews  staff   5844 Oct 28 01:07 README.md
+-rwxr-xr-x@ 1 kiaramathews  staff  33880 Oct 28 01:55 studio6
+-rw-r--r--@ 1 kiaramathews  staff    876 Oct 28 01:53 studio6.c
+
