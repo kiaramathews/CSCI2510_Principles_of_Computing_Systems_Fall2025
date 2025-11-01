@@ -1,0 +1,100 @@
+1. 
+program1: 
+#include <stdio.h>
+
+int main() {
+    printf("Hello Wold Program 1 \n");
+    return 0;
+}
+
+
+program2:
+#include <stdio.h>
+
+int main(void) {
+    char input[100];
+
+    while (1) {
+        if (fgets(input, sizeof(input), stdin) == NULL) {
+            break; 
+        }
+        printf("Program 2 got: %s", input);
+    }
+
+    return 0;
+}
+
+2. 
+Ouput:
+kiaramathews@Kiaras-MacBook-Pro studio7 % gcc -o program3 program3.c
+./program3
+Parent process (PID: 64545) starting...
+Parent: Waiting for children...
+Hello Wold Program 1 
+
+Hello from Program 1!
+Program 2 got:
+
+3.
+man 2 pipe documentation:
+The read end of the pipe is contained in fd[0].
+The write end of the pipe is contained in fd[1].
+on the read side and fd[1] on the write side
+Data written to fd[1] is buffered by the operating system until it is read from fd[0].
+
+4. 
+oldfd: The existing file descriptor you want to copy the properties from.
+newfd: The file descriptor number you want to assign the new properties to.
+
+We want to use the second argument, newfd.
+
+After a successful call to pipe(fd):
+fd[0] is the read end of the pipe
+fd[1] is the write end of the pipe
+
+5. 
+int fd[2];
+pipe(fd);
+
+if (fork() == 0) {
+    dup2(fd[1], STDOUT_FILENO);
+    close(fd[0]);  
+    close(fd[1]);  
+
+    char *cmd1 = "./program1";
+    char *argv1[] = {"program1", NULL};
+    execvp(cmd1, argv1);
+    perror("Error exec'ing program1");
+    exit(1);
+}
+
+if (fork() == 0) {
+    dup2(fd[0], STDIN_FILENO);
+    close(fd[1]);  
+    close(fd[0]);  
+
+    char *cmd2 = "./program2";
+    char *argv2[] = {"program2", NULL};
+    execvp(cmd2, argv2);
+    perror("Error exec'ing program2");
+    exit(1);
+}
+
+close(fd[0]);
+close(fd[1]);
+wait(NULL);
+wait(NULL);
+
+6. 
+Program 2 got: Hello Wold Program 1 
+
+7. 
+Program 2 got: Hello from Program 1
+Parent: both children have finished.
+
+8.
+Two advantages are Program Reusability and Flexibility. Programs don’t need to know where their input comes from or where their output goes.
+The same program can work with files, user input, other programs, or even network connections — all without any code changes. Also easy process communication.
+The operating system can connect programs together with pipes, letting them exchange data directly. This allows powerful combinations of
+simple tools (“Unix philosophy”), where small, single-purpose programs can be chained to perform complex tasks.
+
