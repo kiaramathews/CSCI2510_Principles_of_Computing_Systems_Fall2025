@@ -3,31 +3,40 @@
 #include <unistd.h> //fork(), execvp(), perror(), waidpid() 
 #include <stdlib.h> //For exit()
 #include <stdio.h> //For printf()
+#include <signal.h> // For signal
+
+void ignore_sigint( int signum ){
+    printf("\n[Caller] WARNING: Ignoring SIGINT (Signal number %d).\n", signum);
+}
 
 int main( int argc, char* argv[] ){
 
-	pid_t ret;
+		pid_t ret;
 
-	printf("Forking sleeper...\n");	
+	if (signal(SIGINT, ignore_sigint) == SIG_ERR) {
+        perror("Could not set signal handler");
+        exit(-1);
+    }
 
-	ret = fork();
-	if( ret == -1 ){
+		printf("Forking sleeper...\n");	
+
+		ret = fork();
+		if( ret == -1 ){
 		perror("Could not fork");
 		exit(-1);
-	} 
+		} 
 
-	if( ret == 0 ){ //Child
-		int exec_ret;
-		char* cmd = "./sleep";
-		char* myargv[] = {"sleep", NULL};
-		exec_ret = execvp( cmd, myargv );
-		if( exec_ret == -1 ){
-			perror("Error calling execvp");
-			exit(-1);
+		if( ret == 0 ){ //Child
+			int exec_ret;
+			char* cmd = "./sleep";
+			char* myargv[] = {"sleep", NULL};
+			exec_ret = execvp( cmd, myargv );
+			if( exec_ret == -1 ){
+				perror("Error calling execvp");
+				exit(-1);
+			}	
+
 		}
-
-
-	}
 
 	//Parent
 	printf("Waiting for sleeper %d...\n", ret);
