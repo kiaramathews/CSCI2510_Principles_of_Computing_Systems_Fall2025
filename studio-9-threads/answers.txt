@@ -1,0 +1,101 @@
+1. 
+void* function_name(void* arg);
+Return type: void*
+Argument: void* arg
+
+2. 
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+
+void* thread_entry(void* arg) {
+    printf("Hello thread!\n");
+    return NULL;
+}
+
+3.
+int main() {
+    pthread_t thread;
+    int result;
+
+    result = pthread_create(&thread, NULL, thread_entry, NULL);
+    if (result != 0) {
+        printf("Error creating thread: %d\n", result);
+        return 1;
+    }
+
+    pthread_join(thread, NULL);
+    printf("Thread is finished.\n");
+    return 0;
+}
+
+Output:
+Hello thread!
+Thread is finished.
+
+4. 
+struct thread_data {
+    int arg1;
+    char arg2[100];
+    int ret;
+};
+
+5. 
+kiaramathews@Kiaras-MacBook-Pro studio-9-threads % ./thread_entry                             
+Inside thread:
+  arg1 = 42
+  arg2 = Hello from main!
+Main thread done.
+
+6. 
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+
+struct thread_data {
+    int arg1;
+    char arg2[100];
+    int ret;
+};
+
+void* thread_entry(void* args) {
+    struct thread_data* arg_ptr = (struct thread_data*) args;
+    printf("Thread started: arg1 = %d, arg2 = %s\n", arg_ptr->arg1, arg_ptr->arg2);
+
+    arg_ptr->ret = arg_ptr->arg1 * 2;
+
+    return NULL;
+}
+
+int main() {
+    pthread_t thread;
+    struct thread_data data;
+
+    data.arg1 = 21;
+    snprintf(data.arg2, sizeof(data.arg2), "Return value example");
+
+    pthread_create(&thread, NULL, thread_entry, &data);
+    pthread_join(thread, NULL);
+
+    printf("Returned value from thread: %d\n", data.ret);
+    return 0;
+}
+
+7. 
+kiaramathews@Kiaras-MacBook-Pro studio-9-threads % ./thread_entry                             
+Thread 0 started. Message: This is thread 0
+Thread 4 started. Message: This is thread 4
+Thread 0 returned 0
+Thread 3 started. Message: This is thread 3
+Thread 1 started. Message: This is thread 1
+Thread 2 started. Message: This is thread 2
+Thread 1 returned 10
+Thread 2 returned 20
+Thread 3 returned 30
+Thread 4 returned 40
+All threads finished.
+
+8.
+The output order of the threads being outputted is not consistent and it changes each time the program is run because thread 
+scheduling is handled by the operating system and the threads are executed concurrently making the start and finish order of the 
+threads can vary from one execution to another.
