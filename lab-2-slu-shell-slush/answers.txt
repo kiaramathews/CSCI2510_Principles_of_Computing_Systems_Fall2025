@@ -1,0 +1,8 @@
+1.  As the answer to the first exercise, list the name(s) of the people
+    who worked together on this lab.
+        Kiara Mathews
+2.  Describe any known bugs or ways that your submission deviates from
+    the above specification.
+        None
+3.  Indicate which, if any, extra credit exercises you have attempted.
+    Attempted the extra credit.
