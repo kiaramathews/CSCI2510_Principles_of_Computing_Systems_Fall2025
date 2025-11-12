@@ -1,0 +1,121 @@
+1.  Create a new program, and create a global variable of type `int` and
+    called `race` at the top of your program (in global scope, not in
+    the `main()` function). Then write two functions, called `adder` and
+    `subtractor`, which increment and decrement the variable `race` two
+    million times each. Each function should perform two million
+    additions or subtractions by one. Copy and paste these functions.
+
+Answer: 
+
+    int race = 0;
+
+void* adder(void* arg) {
+    for (int i = 0; i < ITERATIONS; i++) {
+        race++;             // race = race + 1;
+    }
+    return NULL;
+}
+
+void* subtractor(void* arg) {
+    for (int i = 0; i < ITERATIONS; i++) {
+        race--;             // race = race - 1;
+    }
+    return NULL;
+}
+
+2.  What do you think would happen if you executed these functions
+    directly in `main()`? Test your hypothesis by doing so. What
+    happens?
+
+I think that the final value of the race will be 0 because as the adder increases,
+the subtractor decreases by the same amount. 
+
+After running the function I can conclude that my hyphothesis was correct, the value was 0
+after calling the adder function and then the subtractor.
+
+int main() {
+    //calls the adder() and subtractor() directly 
+    adder(NULL);
+    subtractor(NULL);
+
+    printf("Final race value (sequential): %d\n", race);
+    return 0;
+}
+
+3.  What do you think will happen if these two functions were executed
+    simultaneously by two different threads? What specific value do you
+    think the variable `race` would have?
+
+    If the two functions were executed simultaneously by two different threads
+    I would expect the final value of race to still be 0
+
+4.  Modify your program so that each function is executed concurrently
+    by its own thread via `pthread_create()`. Make sure that you create
+    both threads before you wait for either thread. What is the result?
+    Copy and paste several executions of your program.
+
+kiaramathews@Kiaras-MacBook-Pro studio-10-race-conditions % ./race
+Final race value: -628374
+kiaramathews@Kiaras-MacBook-Pro studio-10-race-conditions % ./race
+Final race value: 816737
+kiaramathews@Kiaras-MacBook-Pro studio-10-race-conditions % ./race
+Final race value: -1044864
+kiaramathews@Kiaras-MacBook-Pro studio-10-race-conditions % ./race
+Final race value: -62407
+kiaramathews@Kiaras-MacBook-Pro studio-10-race-conditions % ./race
+Final race value: 179274
+
+5.  Can you explain the program\'s behavior? What do you think the
+    maximum or minimum value could ever be?
+
+    The programs behavior acts in this way because of the race condition.
+    When both of the threads are read, modified, and then write the shared variable race
+    at the same time so some updates are lost when the threads are modifying at the same time.
+
+    If all increments took effect and most decrements were lost, race could 
+    be as high as +2,000,000 and if vise versa,  race could be as low as −2,000,000.
+
+6.  Try changing the number of iterations from two million to one
+    million, and then from one million to 500,000. Does your program
+    still exhibit this behavior? Try your program with 1000 iterations
+    and try your program ten or fifteen times. What about now?
+
+    I came to conclusion that fewer iterations mean fewer opportunities for updates to be lost in race.
+    When I did 1 million and 500,000 iterations the program performed the same for the most part. The value kept changing
+    everytime I ran it and it was rarely 0. However, when I did 1000 iterations it was harder to observe because most of the values 
+    were 0 and occasionally had a value that was not. 
+
+7.  Could your race condition still exhibit itself if your machine had
+    only one processor core? Why or why not?
+
+    Yes, because its mainly about multiple threads and their execution time overlapping so 
+    multiple cores are not neccessarily needed but the run time would be slower. 
+
+8.  Note that the following command requires a Linux-like environment.
+
+    We can simulate this by running your program and only allowing it to
+    execute on one processor. Set the number of iterations back to two
+    million, and then execute the command:
+
+    `taskset -c 0 ./race_program`
+
+    This restricts the program `race_program` to only execute on
+    processor zero. What happens?
+
+    When I ran the program with taskset -c 0 ./race_program, the final value of race was
+    still nondeterministic and often non-zero even though it was restricted to only one CPU core it
+    was still able to switc hbatha nd forth between the two threads causing the race condition to remain functioning.
+
+9. Modify your program so that each function performs two hundred
+    million operations (200,000,000). Run your program on one processor
+    core, what happens?
+
+    The program is a lot slower and the the value of race is very far from 0 and constantly changing from value to value, 
+    because the higher the iterations value, the less chance of reaching 0. 
+
+10. Give a reasonable explanation of the behavior in the previous
+    exercise.
+
+    With the iterations value at 200 million, there are way more opportunities for 
+    the scheduler to interrupt a thread in the middle of the other and switch, leading to many loss of updates 
+    which is why the values are so far from 0. 
