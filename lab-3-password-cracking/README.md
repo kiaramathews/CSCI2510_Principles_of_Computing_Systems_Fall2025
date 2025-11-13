@@ -155,11 +155,3 @@ length, and then have main call it in a loop from 1 to `keysize`.
     present, causes your program to search all uppercase and lowercase
     characters, plus numbers and symbols. *Hint: look at an ASCII table.
     What range of decimal encodings includes all of the above?*
-
-------------------------------------------------------------------------
-
-### Submission
-
-Upload your program to the git repository.
-You must also include a text file
-with your answers to the required exercises.

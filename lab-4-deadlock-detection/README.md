@@ -244,12 +244,3 @@ my solution has are:
 ### Useful man pages
 
 * `scanf(3)` 
-
-------------------------------------------------------------------------
-
-### Submission
-
-Upload your program to the git repository.
-You must also include a text file
-with your answers to the required exercises.
-
