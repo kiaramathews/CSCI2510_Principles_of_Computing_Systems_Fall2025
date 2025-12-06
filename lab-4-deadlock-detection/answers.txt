@@ -1,0 +1,11 @@
+Output:
+kiaramathews@Kiaras-MacBook-Pro-2 lab-4-deadlock-detection % gcc deadlock.c -o deadlock
+
+kiaramathews@Kiaras-MacBook-Pro-2 lab-4-deadlock-detection % ./deadlock < test1        
+Deadlock detected involving process 1
+kiaramathews@Kiaras-MacBook-Pro-2 lab-4-deadlock-detection % ./deadlock < test2
+Deadlock detected involving process 1
+kiaramathews@Kiaras-MacBook-Pro-2 lab-4-deadlock-detection % ./deadlock < test3
+kiaramathews@Kiaras-MacBook-Pro-2 lab-4-deadlock-detection % ./deadlock < test4
+Deadlock detected involving process 0
+kiaramathews@Kiaras-MacBook-Pro-2 lab-4-deadlock-detection % 
